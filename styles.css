@@ -1,0 +1,101 @@
+/* General Styles for Dark Theme */
+body {
+    font-family: 'Arial', sans-serif;
+    background: #121212; /* Dark background */
+    color: #f0f0f0; /* Light text */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+h2 {
+    color: #ffffff; /* Pure white for the title */
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+
+/* Form Container */
+form {
+    background: #1e1e1e; /* Dark gray for form background */
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    width: 100%;
+    margin: 15px auto;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+    color: #c7c7c7; /* Muted light gray for labels */
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #333; /* Subtle border for inputs */
+    border-radius: 5px;
+    background: #2a2a2a; /* Slightly lighter background for inputs */
+    color: #ffffff; /* White text for input fields */
+    font-size: 14px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #4facfe; /* Highlight border on focus */
+    box-shadow: 0 0 5px #4facfe; /* Add subtle glow */
+    outline: none;
+}
+
+input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: #4facfe; /* Teal blue for buttons */
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover {
+    background: #238bff; /* Slightly darker on hover */
+}
+
+/* Message Styling */
+p {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+p[style="color:red;"] {
+    color: #ff4d4d !important; /* Red for error messages */
+}
+
+p[style="color:green;"] {
+    color: #28a745 !important; /* Green for success messages */
+}
+
+/* Responsive Design */
+@media screen and (max-width: 480px) {
+    form {
+        padding: 20px;
+    }
+
+    input[type="submit"] {
+        font-size: 14px;
+    }
+}
