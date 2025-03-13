@@ -106,7 +106,7 @@ $result = $stmt->get_result();
     <div class="navbar">
         <div>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</div>
         <div>
-            <a href="mentor_profile.php?mentor_id=<?php echo $username; ?>" class="btn">View Profile</a>
+            <a href="mentor/mentor_profile.php?mentor_id=<?php echo $username; ?>" class="btn">View Profile</a>
             <a href="logout.php" class="btn">Logout</a>
         </div>
     </div>
@@ -115,7 +115,7 @@ $result = $stmt->get_result();
         // Add "Switch to Admin Mode" button for users who are admins
         if ($_SESSION['original_role'] == 'admin') {
             echo '
-            <form method="POST" action="switch_to_admin.php" style="display:inline;">
+            <form method="POST" action="mentor/switch_to_admin.php" style="display:inline;">
                 <button type="submit">Switch to Admin Mode</button>
             </form>';
         }
@@ -128,7 +128,7 @@ $result = $stmt->get_result();
         <h2>Mentor Profile</h2>
         <p><strong>Name:</strong> <?php echo htmlspecialchars($_SESSION['username']); ?></p>
         <p><strong>Role:</strong> Mentor</p>
-        <a href="mentor_profile.php?mentor_id=<?php echo $username; ?>" class="btn">Edit Profile</a>
+        <a href="mentor/mentor_profile.php?mentor_id=<?php echo $username; ?>" class="btn">Edit Profile</a>
     </div>
 
     <!-- My Groups Section -->
@@ -142,7 +142,7 @@ $result = $stmt->get_result();
                     <p><strong>Batch:</strong> <?php echo htmlspecialchars($row['year_and_batch']); ?></p>
                     <p><strong>Description:</strong> <?php echo htmlspecialchars($row['description']); ?></p>
                     <p><strong>Status:</strong> <?php echo htmlspecialchars($row['status']); ?></p>
-                    <a href="group_details.php?project_id=<?php echo $row['project_id']; ?>" class="view-details">View Details</a>
+                    <a href="mentor/group_details.php?project_id=<?php echo $row['project_id']; ?>" class="view-details">View Details</a>
                 </div>
             <?php endwhile; ?>
         <?php else: ?>

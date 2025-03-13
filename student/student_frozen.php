@@ -1,6 +1,7 @@
     <?php
     session_start();
-    include '../db.php'; // Include the database connection file
+    include $_SERVER['DOCUMENT_ROOT'] . '/projectify/db.php';
+
     include 'navbar.php'; // Include the navbar
 
 
@@ -43,6 +44,7 @@
                     WHERE up.user_id = '$username'";
     $project_result = $conn->query($project_query);
 
+
     // Check if the user is associated with a project
     if ($project_result->num_rows > 0) {
         $project = $project_result->fetch_assoc();
@@ -56,6 +58,8 @@
             $project_status = $project['status'];
             $git_repo_link = $project['git_repo_link'];
             $frozen_status = $project['frozen'];
+           // Store the project ID in the session
+            $_SESSION['project_id'] = $project['id'];
         } else {
             // If project is not frozen, redirect to the in-group page
             header("Location: student_in_group.php");
@@ -123,6 +127,52 @@
 
 
 
+// PDF Upload Logic
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['pdf_file'])) {
+    // $target_dir = "uploads/";
+    $target_dir = $_SERVER['DOCUMENT_ROOT'] . '/projectify/uploads/';
+
+    $original_filename = basename($_FILES["pdf_file"]["name"]);
+    $fileType = strtolower(pathinfo($original_filename, PATHINFO_EXTENSION));
+
+    $project_name = pathinfo($original_filename, PATHINFO_FILENAME);
+    $project_id = $_SESSION['project_id'];
+
+    $target_file = $target_dir . $project_id . "." . $fileType;
+
+    if (move_uploaded_file($_FILES["pdf_file"]["tmp_name"], $target_file)) {
+        $python_script = 'py parse_and_generate.py';
+        $escaped_target_file = escapeshellarg($target_file);
+        $output = shell_exec("$python_script $escaped_target_file 2>&1");
+
+        $warning_position = strpos($output, 'WARNING:');
+        if ($warning_position !== false) {
+            $output = substr($output, 0, $warning_position);
+            $keywords = htmlspecialchars($output);
+        }
+
+        $update_query = "UPDATE project SET pdf_path = ?, keywords = ? WHERE id = ?";
+        $stmt = $conn->prepare($update_query);
+
+        if ($stmt === false) {
+            echo "Error preparing update query: " . $conn->error;
+            exit;
+        }
+
+        $stmt->bind_param("sss", $target_file, $keywords, $project_id);
+
+        if (!$stmt->execute()) {
+            echo "Error updating project details: " . $stmt->error;
+        }
+
+        $stmt->close();
+        $_SESSION['pdf_upload_success'] = true; // Success flag for UI feedback
+        header("Location: " . $_SERVER['PHP_SELF'] . "?success=1");
+        exit;
+    } else {
+        echo "Error: There was an issue uploading your file.";
+    }
+}
 
 
 
@@ -257,17 +307,37 @@
         <h3>Next Steps:</h3>
         <ul>
             <li>Contact your project leader for further updates.</li>
-            <li>Wait for the project to be unfrozen or for new instructions.</li>
         </ul>
     </div>
 
     <div class="section-container">
         <h3>Chat</h3>
-        <?php 
-            $_GET['project_id'] = $project_id; // Pass project ID to chat.php
-            include '../chat/chat.php'; 
-        ?>
+        <a href="../chat/chat.php?project_id=<?php echo urlencode($project_id); ?>">
+            <button>Go to Chat</button>
+        </a>
     </div>
+
+
+
+    <?php if ($role == 'group_leader'): ?>
+    <div class="section-container">
+        <h3>Upload a PDF</h3>
+
+        <?php
+        if (isset($_SESSION['pdf_upload_success']) && $_SESSION['pdf_upload_success'] === true) {
+            echo "<p class='success-message'>File uploaded successfully!</p>";
+            unset($_SESSION['pdf_upload_success']);
+        }
+        ?>
+
+        <form action="" method="post" enctype="multipart/form-data">
+            <label for="pdf_file">Select PDF to upload:</label>
+            <input type="file" name="pdf_file" id="pdf_file" required>
+            <input type="submit" value="Upload PDF">
+        </form>
+    </div>
+<?php endif; ?>
+
 
     <a href="../logout.php"><button>Logout</button></a>
 </body>

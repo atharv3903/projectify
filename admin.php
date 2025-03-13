@@ -56,10 +56,17 @@ $users = $conn->query("SELECT * FROM user");
 
 <!-- Switch to Mentor Mode -->
 <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'mentor'): ?>
-    <form method="POST" action="switch_to_mentor.php" style="display:inline;">
+    <form method="POST" action="admin/switch_to_mentor.php" style="display:inline;">
         <button type="submit">Switch to Mentor Mode</button>
     </form>
 <?php endif; ?>
+
+<div class="section-container">
+        <h3>Upload a PDF</h3>
+        <a href="pdf_upload/upload_single_pdf.php">
+            <button>Go to PDF Upload</button>
+        </a>
+    </div>
 
 <!-- Create User Form -->
 <h3>Create User</h3>
