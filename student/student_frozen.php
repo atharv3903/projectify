@@ -262,8 +262,11 @@
     </div>
 
     <div class="section-container">
-        <h3>Get in Touch with Mentor</h3>
-        <button onclick="window.location.href = 'contact_mentor.php';">Contact Mentor</button>
+        <h3>Chat</h3>
+        <?php 
+            $_GET['project_id'] = $project_id; // Pass project ID to chat.php
+            include '../chat/chat.php'; 
+        ?>
     </div>
 
     <a href="../logout.php"><button>Logout</button></a>

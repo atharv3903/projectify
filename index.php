@@ -37,6 +37,7 @@ if (isset($_POST['login'])) {
             // Set session variables
             $_SESSION['username'] = $user_id;
             $_SESSION['role'] = $user['role'];
+            $_SESSION['original_role'] = $user['role'];
 
             // Fetch mentor's skills if the user is a mentor
             if ($user['role'] == 'mentor') {
@@ -56,6 +57,9 @@ if (isset($_POST['login'])) {
                 header("Location: mentor.php");
             } elseif ($user['role'] == 'group_leader') {
                 header("Location: student/index.php");  // Group leaders have student-like functionality
+            }
+            elseif ($user['role'] == 'admin') {
+                header("Location: admin.php");  // Group leaders have student-like functionality
             }
         } else {
             $error_message = "Invalid credentials!";
