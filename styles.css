@@ -1,8 +1,8 @@
-/* General Styles for Dark Theme */
+/* General Styles for Light Blue Theme */
 body {
     font-family: 'Arial', sans-serif;
-    background: #121212; /* Dark background */
-    color: #f0f0f0; /* Light text */
+    background: #f7faff; /* Light background with a slight blue tint */
+    color: #333; /* Dark text for readability */
     margin: 0;
     padding: 0;
     display: flex;
@@ -13,20 +13,20 @@ body {
 }
 
 h2 {
-    color: #ffffff; /* Pure white for the title */
+    color: #1e3a8a; /* Deep blue for the title */
     margin-bottom: 20px;
     text-align: center;
-    font-size: 24px;
-    letter-spacing: 1px;
+    font-size: 28px;
+    letter-spacing: 1.5px;
 }
 
 /* Form Container */
 form {
-    background: #1e1e1e; /* Dark gray for form background */
-    padding: 25px 30px;
+    background: #ffffff; /* White background for the form */
+    padding: 30px 35px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    max-width: 400px;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1); /* Soft blue shadow */
+    max-width: 450px;
     width: 100%;
     margin: 15px auto;
 }
@@ -35,7 +35,7 @@ label {
     font-weight: bold;
     margin-bottom: 8px;
     display: block;
-    color: #c7c7c7; /* Muted light gray for labels */
+    color: #4a90e2; /* Light blue for labels */
 }
 
 input[type="text"],
@@ -43,25 +43,25 @@ input[type="password"] {
     width: 100%;
     padding: 12px;
     margin-bottom: 20px;
-    border: 1px solid #333; /* Subtle border for inputs */
+    border: 1px solid #cfe2ff; /* Light blue border */
     border-radius: 5px;
-    background: #2a2a2a; /* Slightly lighter background for inputs */
-    color: #ffffff; /* White text for input fields */
+    background: #f0f8ff; /* Very light blue background for inputs */
+    color: #333; /* Dark text for input fields */
     font-size: 14px;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus {
-    border-color: #4facfe; /* Highlight border on focus */
-    box-shadow: 0 0 5px #4facfe; /* Add subtle glow */
+    border-color: #1e3a8a; /* Deep blue border on focus */
+    box-shadow: 0 0 5px #1e3a8a; /* Blue glow effect */
     outline: none;
 }
 
 input[type="submit"] {
     width: 100%;
     padding: 12px;
-    background: #4facfe; /* Teal blue for buttons */
+    background: #1e3a8a; /* Blue for the button */
     border: none;
     border-radius: 5px;
     color: #fff;
@@ -72,7 +72,7 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background: #238bff; /* Slightly darker on hover */
+    background: #2b6cb0; /* Lighter blue on hover */
 }
 
 /* Message Styling */
@@ -92,7 +92,7 @@ p[style="color:green;"] {
 /* Responsive Design */
 @media screen and (max-width: 480px) {
     form {
-        padding: 20px;
+        padding: 25px;
     }
 
     input[type="submit"] {
