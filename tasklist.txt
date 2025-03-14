@@ -15,16 +15,30 @@ use env variable in parse_and_generate
 PENDING:
 
 change format of "Year and Batch" to Year only
-sorting,filtering in all_projects
-searching  in all_projects
 
-merge "Edit or Mark Tasks as Complete" AND "All Group Tasks"
+[NIMISH]
+remove keywords, interested domains
+View PDF button debug
+
+sorting,filtering in all_projects
+searching  in all_projects(upload_single_pdf)
+
+Comments Page
+
+remove Project dashboard section 
+
+
+
+back from all_projects to where user came from(back button)
+search, Filter feature for admin
+mass input users
+merge "Edit or Mark Tasks as Complete" AND "All Group Tasks" and make it work
 Mentor matching (sufiyan)
-Mass pdf upload (Samarth)
+Mass pdf upload (Samarth) [REMAINING]
 Badge (no one for now)
 edit logs for tasks (mentor should see)
 drop tasks (student_frozen)
-
+Next step thigy (dont remember what it was)
 
 
 
