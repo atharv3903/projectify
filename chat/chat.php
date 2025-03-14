@@ -21,8 +21,9 @@ $role = $user['role'];
 
 // Determine project_id
 if ( ( $role === 'mentor' || $role === 'admin' ) && isset($_GET['project_id'])) {
-    echo "Inside IF block: role is either 'mentor' or 'admin' and project_id is set.<br>";
+    //echo "Inside IF block: role is either 'mentor' or 'admin' and project_id is set.<br>";
     $project_id = $_GET['project_id'];
+    //echo $project_id;
 } else {
     echo "Inside ELSE block: Either role is not 'mentor' or 'admin', or project_id is not set.<br>";
     

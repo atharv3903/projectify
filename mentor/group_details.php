@@ -171,6 +171,14 @@ $members_result = $conn->query($members_sql);
 
 <div class="my-groups">
 <h2>Chat</h2>
+        
+        <?php
+        // Get the project ID from the URL
+$project_id = isset($_GET['project_id']) ? $_GET['project_id'] : null;
+
+?>
+<!-- <?php echo ($project_id); ?> -->
+
         <a href="../chat/chat.php?project_id=<?php echo urlencode($project_id); ?>">
             <button>Go to Chat</button>
         </a>

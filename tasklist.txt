@@ -14,6 +14,11 @@ use env variable in parse_and_generate
 
 PENDING:
 
+change format of "Year and Batch" to Year only
+sorting,filtering in all_projects
+searching  in all_projects
+
+merge "Edit or Mark Tasks as Complete" AND "All Group Tasks"
 Mentor matching (sufiyan)
 Mass pdf upload (Samarth)
 Badge (no one for now)
