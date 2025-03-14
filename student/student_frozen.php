@@ -177,6 +177,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['pdf_file'])) {
 
 
 
+// Edit and Mark Task as Complete Logic (Only for Group Leaders)
+if ($role == 'group_leader' && isset($_POST['update_task'])) {
+    $task_id = $_POST['task_id'];
+    $updated_task_name = $_POST['updated_task_name'];
+    $updated_assigned_to = $_POST['updated_assigned_to'];
+    $updated_start_date = $_POST['updated_start_date'];
+    $updated_end_date = $_POST['updated_end_date'];
+    $updated_status = $_POST['updated_status'];
+
+    $update_task_query = "UPDATE task SET name = ?, assigned_to = ?, start = ?, end = ?, status = ? WHERE id = ?";
+    $stmt = $conn->prepare($update_task_query);
+
+    if ($stmt) {
+        $stmt->bind_param("sssssi", $updated_task_name, $updated_assigned_to, $updated_start_date, $updated_end_date, $updated_status, $task_id);
+
+        if ($stmt->execute()) {
+            $_SESSION['task_update_success'] = true;
+        } else {
+            echo "Error updating task: " . $stmt->error;
+        }
+        $stmt->close();
+    }
+
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+
+
 
 
     ////////////////////////////////
@@ -243,16 +271,78 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['pdf_file'])) {
             </form>
         </div>
 
+
+<?php
+    // Fetch all tasks for the project
+    $all_tasks_query = "SELECT t.name, t.start, t.end, t.status, u.name AS assigned_to
+                        FROM task t 
+                        JOIN user u ON t.assigned_to = u.id
+                        WHERE t.project_id = '{$project['id']}'";
+    $all_tasks_result = $conn->query($all_tasks_query);
+?>
+
+<div class="section-container">
+    <h3>Edit or Mark Tasks as Complete</h3>
+    <?php if ($role == 'group_leader' && $all_tasks_result->num_rows > 0): ?>
+        <form method="POST" action="">
+            <label for="task_id">Select Task:</label>
+            <select id="task_id" name="task_id" required>
+                <?php while ($task = $all_tasks_result->fetch_assoc()): ?>
+                    <option value="<?php echo $task['id']; ?>">
+                        <?php echo htmlspecialchars($task['name']); ?>
+                    </option>
+                <?php endwhile; ?>
+            </select><br>
+
+            <label for="updated_task_name">Updated Task Name:</label>
+            <input type="text" id="updated_task_name" name="updated_task_name" required><br>
+
+            <label for="updated_assigned_to">Assign to:</label>
+            <select id="updated_assigned_to" name="updated_assigned_to" required>
+                <?php
+                $group_members_result->data_seek(0); // Reset result pointer
+                while ($member = $group_members_result->fetch_assoc()): ?>
+                    <option value="<?php echo $member['id']; ?>">
+                        <?php echo htmlspecialchars($member['name']); ?>
+                    </option>
+                <?php endwhile; ?>
+            </select><br>
+
+            <label for="updated_start_date">Start Date:</label>
+            <input type="date" id="updated_start_date" name="updated_start_date" required><br>
+
+            <label for="updated_end_date">End Date:</label>
+            <input type="date" id="updated_end_date" name="updated_end_date" required><br>
+
+            <label for="updated_status">Task Status:</label>
+            <select id="updated_status" name="updated_status" required>
+                <option value="in_progress">In Progress</option>
+                <option value="complete">Complete</option>
+                <option value="failed">Failed</option>
+            </select><br>
+
+            <button type="submit" name="update_task">Update Task</button>
+        </form>
+    <?php else: ?>
+        <p>No tasks available to edit.</p>
+    <?php endif; ?>
+</div>
+
+
+
+
+
         <div class="section-container">
             <h3>All Group Tasks</h3>
             <?php
-            // Fetch all tasks for the project
-            $all_tasks_query = "SELECT t.name, t.start, t.end, t.status, u.name AS assigned_to
-                                FROM task t 
-                                JOIN user u ON t.assigned_to = u.id
-                                WHERE t.project_id = '{$project['id']}'";
-            $all_tasks_result = $conn->query($all_tasks_query);
-            ?>
+    // Fetch all tasks for the project
+    $all_tasks_query = "SELECT t.name, t.start, t.end, t.status, u.name AS assigned_to
+                        FROM task t 
+                        JOIN user u ON t.assigned_to = u.id
+                        WHERE t.project_id = '{$project['id']}'";
+    $all_tasks_result = $conn->query($all_tasks_query);
+?>
+            
             <?php if ($all_tasks_result->num_rows > 0): ?>
                 <table border="1">
                     <tr>

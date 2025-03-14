@@ -21,11 +21,9 @@ $role = $user['role'];
 
 // Determine project_id
 if ( ( $role === 'mentor' || $role === 'admin' ) && isset($_GET['project_id'])) {
-    echo "Inside IF block: role is either 'mentor' or 'admin' and project_id is set.<br>";
     $project_id = $_GET['project_id'];
 } else {
-    echo "Inside ELSE block: Either role is not 'mentor' or 'admin', or project_id is not set.<br>";
-    
+    // For non-mentors (students/admins), assume one linked project
     $project_query = "SELECT project_id FROM user_project WHERE user_id = ?";
     $stmt = $conn->prepare($project_query);
     $stmt->bind_param("s", $username);
@@ -68,6 +66,7 @@ $messages_result = $stmt->get_result();
 ?>
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,20 +91,15 @@ $messages_result = $stmt->get_result();
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            height: 90vh;
         }
         .chat-box {
-            flex-grow: 1;
+            max-height: 400px;
             overflow-y: auto;
             border: 2px solid #e5e7eb;
             border-radius: 8px;
             padding: 15px;
             background-color: #f9fafb;
             margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
         }
         .chat-message {
             background: #e0f2fe;
@@ -156,15 +150,21 @@ $messages_result = $stmt->get_result();
     <div class="chat-container">
         <h2>Group Chat - Project ID: <?php echo htmlspecialchars($project_id); ?></h2>
 
-        <div class="chat-box" id="chat-box">
+        <div class="chat-box">
             <?php while ($message = $messages_result->fetch_assoc()): ?>
                 <div class="chat-message">
                     <strong>
                         <?php echo htmlspecialchars($message['name']); ?>
-                        <?php if  ( ($message['role'] === 'mentor' ) || ($message['role'] === 'admin' )): ?>
+                        <?php if ($message['role'] === 'mentor'): ?>
                             <span class="mentor-badge">Mentor</span>
                         <?php endif; ?>
                     </strong>
+                    <?php 
+                // echo htmlspecialchars($message['message']);
+                 ?>
+                 <?php 
+                //  echo nl2br(htmlspecialchars($message['message']));
+                  ?>
                     <p>
                         <?php echo str_replace(["\\r\\n", "\\n", "\\r"], "<br>", htmlspecialchars($message['message'])); ?>
                     </p>
@@ -178,23 +178,10 @@ $messages_result = $stmt->get_result();
             <button type="submit">Send</button>
         </form>
 
-        <?php
-        // Determine the appropriate dashboard link
-        $dashboard_link = ($role === 'admin') ? '../admin.php' :
-                          (($role === 'mentor') ? '/projectify/mentor.php' :
-                          '../student/student_frozen.php');
-    ?>
-
         <a href="<?php echo $dashboard_link; ?>">
             <button class="dashboard-btn">Back to Dashboard</button>
         </a>
     </div>
-
-<script>
-    // Auto-scroll to bottom
-    const chatBox = document.getElementById('chat-box');
-    chatBox.scrollTop = chatBox.scrollHeight;
-</script>
 </body>
 
 

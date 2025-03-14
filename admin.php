@@ -26,10 +26,11 @@ if (isset($_POST['create_user'])) {
 if (isset($_POST['edit_user'])) {
     $id = $_POST['id'];
     $name = $_POST['name'];
-    $role = $_POST['role'];
+    //$role = $_POST['role'];
 
     // 'in_group' is untouched during updates
-    $sql = "UPDATE user SET name='$name', role='$role' WHERE id='$id'";
+    // $sql = "UPDATE user SET name='$name', role='$role' WHERE id='$id'";
+    $sql = "UPDATE user SET name='$name' WHERE id='$id'";
     $conn->query($sql);
 }
 
@@ -106,13 +107,13 @@ $users = $conn->query("SELECT * FROM user");
             <form method="POST" style="display:inline;">
                 <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                 Name: <input type="text" name="name" value="<?php echo $row['name']; ?>" required>
-                Role:
+                <!-- Role:
                 <select name="role">
                     <option value="admin" <?php if ($row['role'] == 'admin') echo 'selected'; ?>>Admin</option>
                     <option value="mentor" <?php if ($row['role'] == 'mentor') echo 'selected'; ?>>Mentor</option>
                     <option value="student" <?php if ($row['role'] == 'student') echo 'selected'; ?>>Student</option>
                     <option value="group_leader" <?php if ($row['role'] == 'group_leader') echo 'selected'; ?>>Group Leader</option>
-                </select>
+                </select> -->
                 <button type="submit" name="edit_user">Edit</button>
             </form>
 

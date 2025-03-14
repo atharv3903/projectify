@@ -1,3 +1,4 @@
+DONE:
 
 User creation/deletion
 Switch login
@@ -5,13 +6,22 @@ message module
 single pdf upload 
 
 verify and mark tasks done
-modify project status (NIMISH)
-
-drop tasks (student_frozen)
+modify project status
 chat formatting (new line n all)
 Remove edit roles from admin.php
+use env variable in parse_and_generate
+
+
+PENDING:
 
 Mentor matching (sufiyan)
 Mass pdf upload (Samarth)
 Badge (no one for now)
 edit logs for tasks (mentor should see)
+drop tasks (student_frozen)
+
+
+
+
+
+
