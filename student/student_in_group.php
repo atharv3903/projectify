@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../db.php'; // Include the database connection file
-include 'navbar.php'; // Include the navbar
+include 'navbar_notFrozen.php'; // Include the navbar
 
 // Check if the user is logged in
 if (!isset($_SESSION['username'])) {

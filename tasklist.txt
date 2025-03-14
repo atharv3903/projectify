@@ -4,18 +4,22 @@ User creation/deletion
 Switch login
 message module
 single pdf upload 
-
 verify and mark tasks done
 modify project status
 chat formatting (new line n all)
 Remove edit roles from admin.php
 use env variable in parse_and_generate
+merge "Edit or Mark Tasks as Complete" AND "All Group Tasks" and make it work
+
+
+
+
+
 
 
 PENDING:
 
 change format of "Year and Batch" to Year only
-
 [NIMISH]
 remove keywords, interested domains
 View PDF button debug
@@ -28,17 +32,34 @@ Comments Page
 remove Project dashboard section 
 
 
-
+mass input users
 back from all_projects to where user came from(back button)
 search, Filter feature for admin
-mass input users
-merge "Edit or Mark Tasks as Complete" AND "All Group Tasks" and make it work
+
+change password feature (for all users)
+password hashing
+
 Mentor matching (sufiyan)
 Mass pdf upload (Samarth) [REMAINING]
 Badge (no one for now)
 edit logs for tasks (mentor should see)
 drop tasks (student_frozen)
 Next step thigy (dont remember what it was)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

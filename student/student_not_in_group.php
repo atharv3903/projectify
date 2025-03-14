@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../db.php'; // Include the database connection file
-include 'navbar.php'; // Include the navbar
+include 'navbar_notFrozen.php'; // Include the navbar
 
 // Check if the user is logged in
 if (!isset($_SESSION['username'])) {
@@ -28,24 +28,24 @@ if ($user['in_group']) {
     exit();
 }
 
+// Calculate Current Financial Year
+$current_year = (date('m') >= 4) ? date('Y') . '-' . (date('Y') + 1) : (date('Y') - 1) . '-' . date('Y');
+
 // Check if the form is submitted to create a new group
 if (isset($_POST['create_group'])) {
     // Get the form data
     $branch = $_POST['branch'];
-    $semester = $_POST['semester'];
-    $current_year = $_POST['current_year'];
-    $division = $_POST['division'];
+    $year_and_batch = $current_year; // Automatically set to the calculated financial year
+    $year_and_batch = $current_year . " " . $branch;
 
-    // Concatenate the year and batch details into a single string
-    $year_and_batch = $branch . " - " . $semester . " - " . $current_year . " - " . $division;
 
-    $project_name = $_POST['project_name'];
-    $project_description = $_POST['project_description'];
+    $project_name = substr($_POST['project_name'], 0, 50);  // Max 50 chars
+    $project_description = substr($_POST['project_description'], 0, 250); // Max 250 chars
+    $git_repo_link = substr($_POST['git_repo_link'], 0, 250); // Max 250 chars
+    $interested_domains = substr($_POST['interested_domains'], 0, 250); // Max 250 chars
     $keywords = $_POST['keywords'];
-    $git_repo_link = $_POST['git_repo_link'];
-    $interested_domains = $_POST['interested_domains'];
 
-    // Create a new project ID (UUID or other unique identifier)
+    // Create a new project ID
     $project_id = uniqid('proj_', true);
 
     // Insert the new project into the project table
@@ -53,15 +53,15 @@ if (isset($_POST['create_group'])) {
             VALUES ('$project_id', '$project_name', '$project_description', '$keywords', '$year_and_batch', 'in_progress', '$git_repo_link', FALSE, '$interested_domains')";
 
     if ($conn->query($sql) === TRUE) {
-        // Update the user's role to group_leader and set in_group to TRUE
+        // Update user's role and set in_group to TRUE
         $update_user_sql = "UPDATE user SET role = 'group_leader', in_group = TRUE WHERE id = '$username'";
         $conn->query($update_user_sql);
 
-        // Insert the user into the user_project table
+        // Insert user into the user_project table
         $user_project_sql = "INSERT INTO user_project (project_id, user_id) VALUES ('$project_id', '$username')";
         $conn->query($user_project_sql);
 
-        // Redirect to the student_in_group.php page after successful project creation
+        // Redirect after successful project creation
         header("Location: student_in_group.php");
         exit();
     } else {
@@ -213,41 +213,39 @@ $invitation_result = $conn->query($invitation_query);
 
 
     <!-- Button to open the project creation form -->
-    <h3>Create a New Group</h3>
+    <!-- <h3>Create a New Group</h3> -->
     <button onclick="document.getElementById('createGroupForm').style.display='block'">Create New Group</button>
 
    <!-- Project Creation Form -->
-    <div id="createGroupForm" style="display:none;">
-        <h4>Enter Project Details</h4>
-        <form action="student_not_in_group.php" method="POST">
+   <div id="createGroupForm" style="display:none;">
+    <h4>Enter Project Details</h4>
+    <form action="student_not_in_group.php" method="POST">
 
-            <label for="project_name">Project Name:</label><br>
-            <input type="text" name="project_name" required><br><br>
+        <label for="project_name">Project Name:</label><br>
+        <input type="text" name="project_name" maxlength="50" required><br><br>
 
-            <label for="project_description">Project Description:</label><br>
-            <textarea name="project_description" required></textarea><br><br>
+        <label for="project_description">Project Description:</label><br>
+        <textarea name="project_description" maxlength="250" required></textarea><br><br>
 
-            <label for="branch">Branch:</label><br>
-            <input type="text" name="branch" required><br><br>
+        <label for="branch">Branch:</label><br>
+        <select name="branch" required>
+            <option value="CSE">CSE</option>
+            <option value="ENTC">ENTC</option>
+            <option value="Mechanical">Mechanical</option>
+            <option value="CIVIL">CIVIL</option>
+            <option value="Environment">Environment</option>
+        </select><br><br>
 
-            <label for="semester">Semester:</label><br>
-            <input type="text" name="semester" required><br><br>
+        <label for="git_repo_link">Git Repository Link:</label><br>
+        <input type="text" name="git_repo_link" maxlength="250"><br><br>
 
-            <label for="current_year">Current Year:</label><br>
-            <input type="text" name="current_year" required><br><br>
+        <label for="interested_domains">Interested Domains (comma separated):</label><br>
+        <input type="text" name="interested_domains" maxlength="250"><br><br>
 
-            <label for="division">Division:</label><br>
-            <input type="text" name="division" required><br><br>
+        <input type="submit" name="create_group" value="Create Group">
+    </form>
+</div>
 
-            <label for="git_repo_link">Git Repository Link:</label><br>
-            <input type="text" name="git_repo_link"><br><br>
-
-            <label for="interested_domains">Interested Domains (comma separated):</label><br>
-            <input type="text" name="interested_domains"><br><br>
-
-            <input type="submit" name="create_group" value="Create Group">
-        </form>
-    </div>
 
 
     <!-- Logout Button -->
