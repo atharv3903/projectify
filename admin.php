@@ -12,6 +12,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
 if (isset($_POST['create_user'])) {
     $id = $_POST['id'];
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Encrypt password
+    $password = $_POST['password'];
     $name = $_POST['name'];
     $role = $_POST['role'];
 

@@ -20,7 +20,7 @@ $user = $user_result->fetch_assoc();
 $role = $user['role'];
 
 // Determine project_id
-if ($role === 'mentor' && isset($_GET['project_id'])) {
+if ( ( $role === 'mentor' || $role === 'admin' ) && isset($_GET['project_id'])) {
     $project_id = $_GET['project_id'];
 } else {
     // For non-mentors (students/admins), assume one linked project

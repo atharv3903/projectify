@@ -4,9 +4,14 @@ Switch login
 message module
 single pdf upload 
 
+verify and mark tasks done
+modify project status (NIMISH)
+
 drop tasks (student_frozen)
 chat formatting (new line n all)
 Remove edit roles from admin.php
-Mentor matching 
-Mass pdf upload
-Badge
+
+Mentor matching (sufiyan)
+Mass pdf upload (Samarth)
+Badge (no one for now)
+edit logs for tasks (mentor should see)
