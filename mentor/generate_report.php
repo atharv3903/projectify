@@ -3,7 +3,7 @@ if (isset($_GET['project_id'])) {
     $project_id = $_GET['project_id'];
 
     // Run the Python script to generate the PDF
-    $command = "python ../generate_report.py " . escapeshellarg($project_id) . " 2>&1";
+    $command = "python generate_report.py " . escapeshellarg($project_id) . " 2>&1";
     $output = shell_exec($command);
 
     // Define the PDF filename
