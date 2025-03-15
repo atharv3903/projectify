@@ -19,41 +19,27 @@ if (!$project_id) {
 // Handle freezing/unfreezing the project
 if (isset($_POST['freeze'])) {
     $sql = "UPDATE project SET frozen = TRUE WHERE id = '$project_id'";
-    if ($conn->query($sql) === TRUE) {
-        echo "Project frozen successfully!";
-    } else {
-        echo "Error freezing project: " . $conn->error;
-    }
+    $conn->query($sql);
 }
-
 if (isset($_POST['unfreeze'])) {
     $sql = "UPDATE project SET frozen = FALSE WHERE id = '$project_id'";
-    if ($conn->query($sql) === TRUE) {
-        echo "Project unfrozen successfully!";
-    } else {
-        echo "Error unfreezing project: " . $conn->error;
-    }
+    $conn->query($sql);
 }
 
 // Fetch detailed project info
-$sql = "SELECT p.name AS project_name, p.description, p.status, p.frozen, p.git_repo_link 
-        FROM project p
-        WHERE p.id = '$project_id'";
+$sql = "SELECT p.name AS project_name, p.description, p.status, p.frozen, p.git_repo_link, p.pdf_path 
+        FROM project p WHERE p.id = '$project_id'";
 $result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    $project = $result->fetch_assoc();
-} else {
-    echo "Project details not found!";
-    exit();
-}
+$project = $result->fetch_assoc();
 
 // Fetch group members but exclude mentors
-$members_sql = "SELECT u.name AS member_name
-                FROM user u
+$members_sql = "SELECT u.name AS member_name FROM user u
                 INNER JOIN user_project up ON u.id = up.user_id
-                WHERE up.project_id = '$project_id' AND (u.role = 'student' OR u.role = 'group_leader')"; // Exclude mentors
+                WHERE up.project_id = '$project_id' AND (u.role = 'student' OR u.role = 'group_leader')";
 $members_result = $conn->query($members_sql);
+
+// Fetch PDF path
+$pdf_path = $project['pdf_path'] ?? null;
 ?>
 
 <!DOCTYPE html>
@@ -62,12 +48,10 @@ $members_result = $conn->query($members_sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Group Details</title>
-    <!-- <link rel="stylesheet" href="mentorStyles.css"> -->
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f3f4f6;
-            color: #1f2937;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
             display: flex;
@@ -76,122 +60,104 @@ $members_result = $conn->query($members_sql);
         }
         .navbar {
             width: 100%;
-            background-color: #2563eb;
-            color: #ffffff;
-            display: flex;
-            justify-content: space-between;
-            padding: 15px 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
         }
         .navbar a {
-            color: #ffffff;
+            color: white;
             text-decoration: none;
+            margin-left: 10px;
+            font-size: 16px;
         }
-        .profile, .my-groups {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        .container {
+            width: 80%;
+            max-width: 900px;
+            background: white;
             padding: 20px;
-            width: 90%;
-            max-width: 800px;
-            margin: 20px 0;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        h2 {
-            color: #3b82f6;
-        }
-        .freeze-btn {
-            background-color: #ef4444;
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .freeze-btn:hover {
-            background-color: #dc2626;
-        }
+        h2 { color: #007bff; }
+        p, a { font-size: 16px; }
+        a { color: #007bff; }
         button {
-            background-color: #10b981;
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        button:hover {
-            background-color: #059669;
-        }
-        a button {
-            width: 100%;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            background-color: #e0f2fe;
-            border-radius: 8px;
+            background-color: #28a745;
+            color: white;
             padding: 10px;
-            margin-bottom: 8px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
         }
+        .freeze-btn { background-color: #dc3545; }
+        .freeze-btn:hover { background-color: #c82333; }
+        .my-groups ul { padding: 0; list-style: none; }
+        .my-groups li { padding: 5px 0; }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <div>Group Details</div>
-        <div>
-            <a href="../mentor.php">Back to Dashboard</a>
-        </div>
+        Group Details | <a href="../mentor.php">Back to Dashboard</a>
     </div>
+    
+    <div class="container">
+    <h2><?php echo htmlspecialchars($project['project_name']); ?></h2>
+    <p><strong>Description:</strong> <?php echo htmlspecialchars($project['description']); ?></p>
+    <p><strong>Status:</strong> <?php echo htmlspecialchars($project['status']); ?></p>
+    <p>
+        <strong>Git Repository:</strong> 
+        <a href="<?php echo htmlspecialchars($project['git_repo_link']); ?>" target="_blank">View Repository</a>
+    </p>
 
-    <div class="profile">
-        <h2><?php echo htmlspecialchars($project['project_name']); ?></h2>
-        <p><strong>Description:</strong> <?php echo htmlspecialchars($project['description']); ?></p>
-        <p><strong>Status:</strong> <?php echo htmlspecialchars($project['status']); ?></p>
-        <p><strong>Git Repository Link:</strong> 
-            <a href="<?php echo htmlspecialchars($project['git_repo_link']); ?>" target="_blank">
-                <?php echo htmlspecialchars($project['git_repo_link']); ?>
-            </a>
-        </p>
-
-        <form method="POST">
-            <?php if ($project['frozen']): ?>
-                <button type="submit" name="unfreeze" class="freeze-btn">Unfreeze Project</button>
-            <?php else: ?>
-                <button type="submit" name="freeze" class="freeze-btn">Freeze Project</button>
-            <?php endif; ?>
-        </form>
-    </div>
-
-    <div class="my-groups">
-        <h2>Group Members</h2>
-        <?php if ($members_result->num_rows > 0): ?>
-            <ul>
-                <?php while ($member = $members_result->fetch_assoc()): ?>
-                    <li><?php echo htmlspecialchars($member['member_name']); ?></li>
-                <?php endwhile; ?>
-            </ul>
+    <form method="POST">
+        <?php if ($project['frozen']): ?>
+            <button type="submit" name="unfreeze" class="freeze-btn">Unfreeze Project</button>
         <?php else: ?>
-            <p>No members in this group.</p>
+            <button type="submit" name="freeze" class="freeze-btn">Freeze Project</button>
         <?php endif; ?>
-    </div>
+    </form>
 
-    <div class="my-groups">
+    <hr>
 
-    <?php include '../student/gantt_chart.php'; ?>
+    <h2>Group Members</h2>
+    <ul>
+        <?php while ($member = $members_result->fetch_assoc()): ?>
+            <li><?php echo htmlspecialchars($member['member_name']); ?></li>
+        <?php endwhile; ?>
+    </ul>
+</div>
 
-    </div>
-
-    <div class="my-groups">
+    <div class="container">
+        <?php include '../student/gantt_chart.php'; ?>
+    </div>      
+    <div class="container">
         <h2>Chat</h2>
         <?php
-        $project_id = isset($_GET['project_id']) ? $_GET['project_id'] : null;
+            $project_id = $_GET['project_id'];
         ?>
         <a href="../chat/chat.php?project_id=<?php echo urlencode($project_id); ?>">
-            <button>Go to Chat</button>
+    
+        <button>Go to Chat</button>
         </a>
+    </div>
+    
+    <div class="container">
+        <h2>Project Report</h2>
+        <a href="generate_report.php?project_id=<?php echo $project_id; ?>">
+            <button>Download Report</button>
+        </a>
+        <?php if (!empty($pdf_path) && file_exists($pdf_path)): ?>
+            <iframe src="<?php echo htmlspecialchars(str_replace('C:/xampp/htdocs/projectify/', '/projectify/', $pdf_path)); ?>" width="100%" height="500px"></iframe>
+            <p><a href="<?php echo htmlspecialchars(str_replace('C:/xampp/htdocs/projectify/', '/projectify/', $pdf_path)); ?>" target="_blank"><button>Download PDF</button></a></p>
+        <?php else: ?>
+            <p>No PDF uploaded or file not found.</p>
+        <?php endif; ?>
     </div>
 </body>
 </html>
