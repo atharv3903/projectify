@@ -1,10 +1,10 @@
-<?php
+<?php 
 session_start();
 include 'db.php'; // Include the database connection file
 
 // Check if the user is logged in and is a mentor
 if (!isset($_SESSION['username']) || $_SESSION['role'] != 'mentor') {
-    header("Location: login.php"); // Redirect to login if not a mentor
+    header("Location: index.php"); // Redirect to login if not a mentor
     exit();
 }
 
@@ -24,13 +24,6 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
-
-
-
-
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -39,122 +32,178 @@ $result = $stmt->get_result();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mentor Dashboard</title>
-    <link rel="stylesheet" href="mentorStyles.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
+        /* General Styles */
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f2f5;
+            background-color: #f4f6f9;
             color: #333;
+            display: flex;
         }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding-top: 20px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .sidebar a:hover, .sidebar a.active {
+            background: #2980b9;
+            padding-left: 25px;
+        }
+
+        .sidebar i {
+            margin-right: 10px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+            width: calc(100% - 260px);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Navbar */
         .navbar {
-            background-color: #343a40;
-            color: #fff;
-            padding: 15px;
+            background-color: white;
+            color: #333;
+            padding: 15px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .navbar a {
-            color: #fff;
-            text-decoration: none;
-            margin-right: 20px;
-            font-weight: bold;
-        }
-        .profile {
-            margin: 20px;
-            background-color: #fff;
-            padding: 20px;
+            border-bottom: 2px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .my-groups {
-            margin: 20px;
+
+        .navbar .user {
+            font-weight: 600;
+            font-size: 18px;
         }
-        .group {
-            background-color: #fff;
+
+        /* Cards */
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
-        .group h3 {
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
             margin-bottom: 10px;
-            color: #343a40;
-        }
-        .group p {
-            color: #555;
-        }
-        .view-details {
-            text-decoration: none;
             color: #007bff;
-            font-weight: bold;
         }
+
+        /* Buttons */
         .btn {
             display: inline-block;
-            margin-top: 10px;
             padding: 10px 15px;
-            background-color: #007bff;
+            background: linear-gradient(135deg, #3498db, #2980b9);
             color: #fff;
             border: none;
-            border-radius: 4px;
-            text-align: center;
-            cursor: pointer;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease-in-out;
         }
+
         .btn:hover {
-            background-color: #0056b3;
+            background: linear-gradient(135deg, #2980b9, #1a5276);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <div class="navbar">
-        <div>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</div>
-        <div>
-            <a href="mentor/mentor_profile.php?mentor_id=<?php echo $username; ?>" class="btn">View Profile</a>
-            <a href="logout.php" class="btn">Logout</a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Mentor Dashboard</h2>
+        <a href="mentor_dashboard.php" class="active"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="mentor/mentor_profile.php?mentor_id=<?php echo $username; ?>"><i class="fas fa-user"></i> Profile</a>
+        <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <?php if ($_SESSION['original_role'] == 'admin'): ?>
+            <a href="mentor/switch_to_admin.php" class="btn"><i class="fas fa-user-shield"></i> Switch to Admin</a>
+        <?php endif; ?>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="navbar">
+            <div class="user">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</div>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="card">
+            <h2>Mentor Profile</h2>
+            <p><strong>Name:</strong> <?php echo htmlspecialchars($_SESSION['username']); ?></p>
+            <p><strong>Role:</strong> Mentor</p>
+            <a href="mentor/mentor_profile.php?mentor_id=<?php echo $username; ?>" class="btn">Edit Profile</a>
+        </div>
+
+        <!-- My Groups Section -->
+        <div class="card">
+            <h2>My Groups</h2>
+            <?php if ($result->num_rows > 0): ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                    <div class="card">
+                        <h3><?php echo htmlspecialchars($row['project_name']); ?></h3>
+                        <p><strong>Project ID:</strong> <?php echo htmlspecialchars($row['project_id']); ?></p>
+                        <p><strong>Batch:</strong> <?php echo htmlspecialchars($row['year_and_batch']); ?></p>
+                        <p><strong>Description:</strong> <?php echo htmlspecialchars($row['description']); ?></p>
+                        <p><strong>Status:</strong> <?php echo htmlspecialchars($row['status']); ?></p>
+                        <a href="mentor/group_details.php?project_id=<?php echo $row['project_id']; ?>" class="btn">View Details</a>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <p>No groups allocated yet.</p>
+            <?php endif; ?>
         </div>
     </div>
 
-    <?php
-        // Add "Switch to Admin Mode" button for users who are admins
-        if ($_SESSION['original_role'] == 'admin') {
-            echo '
-            <form method="POST" action="mentor/switch_to_admin.php" style="display:inline;">
-                <button type="submit">Switch to Admin Mode</button>
-            </form>';
-        }
-    ?>
-
-    
-
-    <!-- Profile Section -->
-    <div class="profile">
-        <h2>Mentor Profile</h2>
-        <p><strong>Name:</strong> <?php echo htmlspecialchars($_SESSION['username']); ?></p>
-        <p><strong>Role:</strong> Mentor</p>
-        <a href="mentor/mentor_profile.php?mentor_id=<?php echo $username; ?>" class="btn">Edit Profile</a>
-    </div>
-
-    <!-- My Groups Section -->
-    <div class="my-groups">
-        <h2>My Groups</h2>
-        <?php if ($result->num_rows > 0): ?>
-            <?php while ($row = $result->fetch_assoc()): ?>
-                <div class="group">
-                    <h3><?php echo htmlspecialchars($row['project_name']); ?></h3>
-                    <p><strong>Project ID:</strong> <?php echo htmlspecialchars($row['project_id']); ?></p>
-                    <p><strong>Batch:</strong> <?php echo htmlspecialchars($row['year_and_batch']); ?></p>
-                    <p><strong>Description:</strong> <?php echo htmlspecialchars($row['description']); ?></p>
-                    <p><strong>Status:</strong> <?php echo htmlspecialchars($row['status']); ?></p>
-                    <a href="mentor/group_details.php?project_id=<?php echo $row['project_id']; ?>" class="view-details">View Details</a>
-                </div>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <p>No groups allocated yet.</p>
-        <?php endif; ?>
-    </div>
 </body>
 </html>

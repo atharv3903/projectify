@@ -2,14 +2,8 @@
 // Start session for login check
 session_start();
 
-// Database connection details
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "projectify";
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+include'db.php';
 
 // Check connection
 if ($conn->connect_error) {

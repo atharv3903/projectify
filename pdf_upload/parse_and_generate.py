@@ -24,7 +24,8 @@ def extract_pdf_text(pdf_path):
 # Function to generate keywords using Gemini
 def generate_keywords(text):
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        # model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-2.0-flash")
         prompt = f"Extract 15 tech-related keywords from the following text:\n{text}. give me only 15 keywords separated by comma, nothing else. please"
         response = model.generate_content(prompt)
         return response.text if response and response.text else 'Error in keyword generation'

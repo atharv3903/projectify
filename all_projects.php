@@ -2,11 +2,8 @@
 // Start session for login check
 session_start();
 
-// Database connection details
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "projectify";
+include'db.php';
+
 
 // Save current page URL for redirect after login
 $current_page = $_SERVER['PHP_SELF'];
@@ -14,8 +11,6 @@ if (!isset($_SESSION['redirect_after_login'])) {
     $_SESSION['redirect_after_login'] = $current_page;
 }
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
@@ -200,10 +195,22 @@ $total_projects = $count_row['total'];
             }
         };
     </script>
+    <link rel="stylesheet" href="admin/styles.css">
 </head>
 
 <body>
     <h1>Project Details</h1>
+
+
+    
+<div class="navbar">    
+    <h2>Projectify</h2>
+    <a href="index.php">Home</a>
+    <a href="all_projects.php">View All Projects</a>
+    <!-- <a href="admin/oldPDFUpload.php">Upload (Previous) pdfs</a> -->
+    <a href="logout.php">Logout</a>
+</div>
+
 
     <!-- Sorting form -->
     <div class="sort-form">
