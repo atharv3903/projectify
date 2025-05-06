@@ -1,0 +1,48 @@
+DONE:
+User creation/deletion
+Switch login
+Message module
+Single PDF upload
+Verify and mark tasks as done
+Modify project status
+Chat formatting (new line and all)
+Remove edit roles from admin.php
+Use env variable in parse_and_generate
+Merge "Edit or Mark Tasks as Complete" AND "All Group Tasks" and make it work
+Remove Project dashboard section
+Mentor matching (Sufiyan)
+Drop tasks (student_frozen)
+Change format of "Year and Batch" to Year only
+Mass input users
+create single user without clashing, and take imput id
+
+
+PENDING:
+Change password feature (for all users)
+Search, filter feature for admin
+Badge (No one for now)
+CONSISTENT css for all pages
+Check for edge cases for all queries and inserts (gemini responses n all)
+Admin should have access to all projects 
+
+Performance Improvements:
+    Password hashing
+    Back from all_projects to where the user came from (back button)
+    SQL injections proof
+    optimize to return Limited Rows (Users in admin[manageUsers],
+                                     projects in all_projects,
+                                     etc CHECK ALL PAGES )
+    
+
+
+
+
+Mass PDF upload (Samarth) [REMAINING]
+
+
+Remove keywords, interested domains
+View PDF button debug [DROP]
+Sorting, filtering in all_projects
+Comments Page
+NIMISH:
+Searching in all_projects (upload_single_pdf)

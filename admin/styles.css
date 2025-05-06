@@ -1,0 +1,169 @@
+/* General reset for better cross-browser consistency */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Universal styles */
+body {
+    margin-left: 220px; /* Push content to the right to accommodate navbar */
+    padding: 20px;
+    font-family: 'Poppins', Arial, sans-serif; /* Modern font */
+    background-color: #f7faff; /* Light background with a slight blue tint */
+    color: #333; /* Dark text for readability */
+    line-height: 1.6;
+}
+
+/* Navbar styles */
+.navbar {
+    position: fixed; /* Make navbar stay at the top */
+    top: 0;
+    left: 0;
+    width: 220px; /* Adjust width of the navbar */
+    height: 100%; /* Make navbar span the full height of the viewport */
+    background: linear-gradient(135deg, #1e3a8a, #4a90e2); /* Deep blue and light blue gradient */
+    color: #fff; /* White text color */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Add slight shadow */
+}
+
+.navbar h2 {
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #fff;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #fff;
+    margin: 10px 0;
+    font-size: 1.1em;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background 0.3s ease, color 0.3s ease;
+    display: block;
+}
+
+.navbar a:hover {
+    background: #ffffff33; /* Semi-transparent white background */
+    color: #fff; /* Keep text color white */
+}
+
+/* Main content styles */
+h1, h2, h3 {
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Section containers with distinct borders and padding */
+.section-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.section-container h3 {
+    font-size: 1.5em;
+    color: #1e3a8a; /* Dark blue color for headers */
+    margin-bottom: 20px;
+}
+
+.section-container p {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+/* Buttons styling */
+button {
+    padding: 10px 15px;
+    font-size: 1em;
+    color: #fff;
+    background: linear-gradient(135deg, #1e3a8a, #4a90e2); /* Deep blue to light blue gradient */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #4a90e2, #1e3a8a); /* Reverse the gradient on hover */
+    transform: translateY(-2px); /* Adds subtle lift effect */
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff; /* Clean white background */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: left;
+    font-size: 1em;
+}
+
+table th {
+    background: linear-gradient(135deg, #1e3a8a, #4a90e2); /* Deep blue and light blue gradient */
+    color: #fff;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Alternating row color */
+}
+
+table tr:hover {
+    background-color: #eaf3ff; /* Soft hover effect */
+}
+
+/* Custom button links */
+a.button {
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #1e3a8a, #4a90e2); /* Deep blue and light blue gradient */
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+a.button:hover {
+    background: linear-gradient(135deg, #4a90e2, #1e3a8a); /* Reverse the gradient on hover */
+    transform: translateY(-2px);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .navbar {
+        width: 180px;
+    }
+
+    body {
+        margin-left: 200px;
+    }
+
+    table th, table td {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    button {
+        font-size: 0.9em;
+    }
+}

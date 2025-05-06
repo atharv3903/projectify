@@ -1,0 +1,287 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3307
+-- Generation Time: Mar 14, 2025 at 07:21 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `projectify`
+--
+
+
+
+
+--
+-- Table structure for table `group_invite`
+
+
+CREATE TABLE `group_invite` (
+  `user_id` varchar(255) NOT NULL,
+  `project_id` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+CREATE TABLE `mentor_skills` (
+  `mentor_id` varchar(255) NOT NULL,
+  `expertise` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+--
+
+INSERT INTO `mentor_skills` (`mentor_id`, `expertise`) VALUES
+('m1', 'AI, Machine Learning'),
+('m1', 'Data Science');
+
+-- --------------------------------------------------------
+CREATE TABLE `messages` (
+  `id` int(11) NOT NULL,
+  `project_id` varchar(255) NOT NULL,
+  `user_id` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-
+
+INSERT INTO `messages` (`id`, `project_id`, `user_id`, `message`, `timestamp`) VALUES
+(14, 'proj_674b061eac43a6.33133935', 's1', 'hi!?', '2025-03-13 11:25:01'),
+(15, 'proj_674b061eac43a6.33133935', 'g1', 'hello', '2025-03-13 11:25:34'),
+(16, 'proj_674b061eac43a6.33133935', 'm1', 'hi hello bas, kama kra jra', '2025-03-13 11:25:56'),
+(17, 'proj_674b061eac43a6.33133935', 'm1', 'ok!?', '2025-03-13 14:13:30'),
+(18, 'proj_674b061eac43a6.33133935', 's1', 'NOPE, we will do our shi', '2025-03-13 16:22:32'),
+(19, 'proj_674b061eac43a6.33133935', 's1', 'NOPE, we will do our shi', '2025-03-13 16:22:44'),
+(20, 'proj_674b061eac43a6.33133935', 's1', 'ashdjasdjkasd', '2025-03-13 16:24:12'),
+(21, 'proj_674b061eac43a6.33133935', 's1', 'ashdjasdjkasd', '2025-03-13 16:24:43'),
+(22, 'proj_674b061eac43a6.33133935', 's1', 'asdasd', '2025-03-13 16:24:53'),
+(23, 'proj_674b061eac43a6.33133935', 's1', 'heyysdfsafdafc', '2025-03-13 16:35:42'),
+(24, 'proj_674b061eac43a6.33133935', 's1', 'adasdadsasd', '2025-03-13 16:35:51'),
+(25, 'proj_674b061eac43a6.33133935', 's1', 'sadniajsdhcnascma\\r\\nsdchnsaca\\r\\nnadksjnvkasv\\r\\nsakfcnalca\\r\\nascjnkaldncvaldv\\r\\nasckascm', '2025-03-13 16:36:05'),
+(26, 'proj_674b061eac43a6.33133935', 'm1', 'asdasdadsasdasd', '2025-03-13 16:37:26');
+
+-- --------------------------------------------------------
+
+--
+--
+
+CREATE TABLE `project` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL DEFAULT 'No desc available',
+  `keywords` varchar(255) NOT NULL DEFAULT 'No keywords available',
+  `year_and_batch` varchar(255) NOT NULL DEFAULT 'no data available',
+  `status` enum('in_progress','incomplete','complete') NOT NULL DEFAULT 'in_progress',
+  `git_repo_link` varchar(255) NOT NULL DEFAULT 'No link available',
+  `frozen` tinyint(1) NOT NULL DEFAULT 0,
+  `interested_domains` varchar(255) NOT NULL DEFAULT '',
+  `pdf_path` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `project`
+--
+
+INSERT INTO `project` (`id`, `name`, `description`, `keywords`, `year_and_batch`, `status`, `git_repo_link`, `frozen`, `interested_domains`, `pdf_path`) VALUES
+('proj_674b061eac43a6.33133935', 'Projectify', 'abc', 'Electrical Engineering, Power System Analysis, UELC0602, Cycle-2, Engineering, Technology, Power Systems, Electrical, System Analysis, Course Code, Course Name, Sem,  Room number, Reg. No.,  ETCR-01\n\n', 'CSE - 7 - 2024 - A', 'in_progress', 'https://abca.com/', 1, 'Ai, ml', 'C:/xampp/htdocs/projectify/uploads/proj_674b061eac43a6.33133935.pdf'),
+('proj_6755b1587fb269.58962327', 'Smart Home Automation System', 'A system that allows users to control various household appliances remotely via a mobile app, utilizing IoT and voice recognition technologies for smart living.', '', 'CSE - 5th - 2024 - A', 'in_progress', 'https://abc.com/', 0, 'IoT, Machine Learning, Cloud Computing, Mobile App Development', NULL);
+
+-- --------------------------------------------------------
+
+
+CREATE TABLE `setting` (
+  `max_group_size` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+INSERT INTO `setting` (`max_group_size`) VALUES
+(4);
+
+-- --------------------------------------------------------
+
+
+CREATE TABLE `task` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `project_id` varchar(255) NOT NULL,
+  `assigned_to` varchar(255) NOT NULL,
+  `start` date NOT NULL,
+  `end` date NOT NULL,
+  `status` enum('in_progress','complete','failed') NOT NULL DEFAULT 'in_progress'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+INSERT INTO `task` (`id`, `name`, `project_id`, `assigned_to`, `start`, `end`, `status`) VALUES
+(1, 'login page testing', 'proj_674b061eac43a6.33133935', 's1', '2024-11-29', '2024-12-05', 'in_progress'),
+(3, 'gantt chart debugging', 'proj_674b061eac43a6.33133935', 's2', '2024-12-02', '2024-12-11', 'in_progress'),
+(4, 'Do documentation', 'proj_674b061eac43a6.33133935', 'm1', '2024-12-01', '2024-12-11', 'in_progress');
+
+-- --------------------------------------------------------
+
+
+
+CREATE TABLE `user` (
+  `id` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `role` enum('admin','mentor','student','group_leader') NOT NULL,
+  `in_group` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+INSERT INTO `user` (`id`, `password`, `name`, `role`, `in_group`) VALUES
+('a1', '123', 'SufiyanIsNoob', 'admin', 0),
+('g1', '123', 'Sufiyan', 'group_leader', 1),
+('m1', '123', 'Samarth', 'admin', 0),
+('poe1', '123', 'Atharv Naik 2', 'student', 0),
+('poe2', '123', 'Sufiyan Attar 2', 'student', 0),
+('poe3', '123', 'Sanket Kembalkar 2', 'group_leader', 1),
+('poe4', '123', 'Nimish Joshi ', 'group_leader', 1),
+('s1', '123', 'Atharv', 'student', 1),
+('s2', '123', 'Nimish', 'student', 1);
+
+-- --------------------------------------------------------
+
+
+--
+
+CREATE TABLE `user_project` (
+  `project_id` varchar(255) NOT NULL,
+  `user_id` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_project`
+--
+
+INSERT INTO `user_project` (`project_id`, `user_id`) VALUES
+('proj_674b061eac43a6.33133935', 'g1'),
+('proj_674b061eac43a6.33133935', 'm1'),
+('proj_674b061eac43a6.33133935', 's1'),
+('proj_674b061eac43a6.33133935', 's2'),
+('proj_6755b1587fb269.58962327', 'poe4');
+
+--
+ALTER TABLE `group_invite`
+  ADD PRIMARY KEY (`user_id`,`project_id`),
+  ADD KEY `project_id` (`project_id`);
+
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `project_id` (`project_id`),
+  ADD KEY `user_id` (`user_id`);
+
+
+ALTER TABLE `project`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `task`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `project_id` (`project_id`),
+  ADD KEY `assigned_to` (`assigned_to`);
+
+--
+
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`);
+
+--
+
+--
+ALTER TABLE `user_project`
+  ADD PRIMARY KEY (`project_id`,`user_id`),
+  ADD KEY `user_id` (`user_id`);
+
+-
+--
+
+ALTER TABLE `messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+
+ALTER TABLE `task`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+
+ALTER TABLE `group_invite`
+  ADD CONSTRAINT `group_invite_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `group_invite_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `messages`
+  ADD CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`),
+  ADD CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+
+ALTER TABLE `task`
+  ADD CONSTRAINT `task_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `task_ibfk_2` FOREIGN KEY (`assigned_to`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+ALTER TABLE `user_project`
+  ADD CONSTRAINT `user_project_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_project_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- Social Media Tables
+CREATE TABLE `social_posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `media_url` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `social_posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `post_likes` (
+  `post_id` int(11) NOT NULL,
+  `user_id` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`post_id`, `user_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `post_likes_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `social_posts` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `post_likes_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `post_comments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `post_id` int(11) NOT NULL,
+  `user_id` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `post_id` (`post_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `post_comments_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `social_posts` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `post_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `post_shares` (
+  `post_id` int(11) NOT NULL,
+  `user_id` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`post_id`, `user_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `post_shares_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `social_posts` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `post_shares_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
