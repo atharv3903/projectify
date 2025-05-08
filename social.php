@@ -173,6 +173,7 @@ $posts_query = "
         sp.*,
         u.name as user_name,
         u.role as user_role,
+        u.id as user_id,
         (SELECT COUNT(*) FROM post_likes WHERE post_id = sp.id) as like_count,
         (SELECT COUNT(*) FROM post_comments WHERE post_id = sp.id) as comment_count,
         (SELECT COUNT(*) FROM post_shares WHERE post_id = sp.id) as share_count,
@@ -431,7 +432,7 @@ switch ($role) {
                         <i class="fas fa-user"></i>
                     </div>
                     <div class="user-info">
-                        <h6 class="user-name"><?php echo htmlspecialchars($post['user_name']); ?></h6>
+                        <h6 class="user-name"><a href="all_projects.php?user=<?php echo urlencode($post['user_id']); ?>&user_name=<?php echo urlencode($post['user_name']); ?>"><?php echo htmlspecialchars($post['user_name']); ?></a></h6>
                         <p class="user-role"><?php echo htmlspecialchars($post['user_role']); ?></p>
                     </div>
                     <span class="timestamp">

@@ -117,8 +117,27 @@ if (!empty($secondary_sort)) {
     $order_clause .= ", $secondary_sort $secondary_order";
 }
 
+$user_id = isset($_GET['user']) ? $_GET['user'] : null;
+$user_name = isset($_GET['user_name']) ? $_GET['user_name'] : null;
+
 // Query to get all projects with sorting
-$sql = "SELECT id, name, description, keywords, year_and_batch, status, git_repo_link, interested_domains, pdf_path FROM project $order_clause";
+
+$sql = "SELECT id, name, description, keywords, year_and_batch, status, git_repo_link, interested_domains, pdf_path FROM project";
+
+// Append WHERE clause if user_id is present
+if (!is_null($user_id)) {
+    $sql = "
+        SELECT 
+            p.id, p.name, p.description, p.keywords, 
+            p.year_and_batch, p.status, p.git_repo_link, 
+            p.interested_domains, p.pdf_path
+        FROM project p
+        JOIN user_project up ON p.id = up.project_id
+        WHERE up.user_id = \"".$user_id ."\"";
+}
+$sql .= " $order_clause";
+
+
 $result = $conn->query($sql);
 
 // Count total number of projects
@@ -134,7 +153,7 @@ $total_projects = $count_row['total'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Details</title>
+    <title>Project Details<?php if (!is_null($user_name)){echo " for ".$user_name;}?></title>
     <style>
         .sort-form {
             margin: 20px 0;
@@ -199,7 +218,7 @@ $total_projects = $count_row['total'];
 </head>
 
 <body>
-    <h1>Project Details</h1>
+    <h1>Project Details<?php if (!is_null($user_name)){echo " for ".$user_name;}?></h1>
 
 
     
